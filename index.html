@@ -68,6 +68,39 @@
         { "@type": "PropertyValue", "name": "CRM-MG", "value": "62929" },
         { "@type": "PropertyValue", "name": "RQE", "value": "59597" }
       ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5.0",
+        "reviewCount": "17",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "review": [
+        {
+          "@type": "Review",
+          "author": { "@type": "Person", "name": "Rick Disc" },
+          "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+          "reviewBody": "Tive uma excelente experiência com o Dr. Matheus Rangel. Além de ser um profissional extremamente competente, ele é muito explicativo e didático. Recomendo fortemente para quem busca um otorrino de confiança."
+        },
+        {
+          "@type": "Review",
+          "author": { "@type": "Person", "name": "Maria Eduarda" },
+          "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+          "reviewBody": "Minha mãe estava com muita dor e o Dr Matheus foi atender ela mesmo no dia em que não atende no consultório. Outros médicos não solucionaram o caso. Tratamento maravilhoso, no dia seguinte ela já sentia alívio."
+        },
+        {
+          "@type": "Review",
+          "author": { "@type": "Person", "name": "Bela Parfrey" },
+          "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+          "reviewBody": "Excelente profissional! O Dr. Matheus é extremamente atencioso, cuidadoso e transmite muita segurança durante a consulta. Atendimento humanizado e de altíssimo nível. Recomendo de olhos fechados!"
+        },
+        {
+          "@type": "Review",
+          "author": { "@type": "Person", "name": "Diocelly Leandro" },
+          "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+          "reviewBody": "Melhor médico, atendeu meu menino de 5 anos e correu tudo bem. Se recuperou rápido. Obrigado, doutor Matheus Rangel!"
+        }
+      ],
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
         "name": "Procedimentos cirúrgicos",
@@ -474,7 +507,39 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;letter-spacing:.04em;line
 }
 
 /* ---------- FILOSOFIA ---------- */
-.reviews .reviews-widget{margin-top:48px;min-height:80px}
+/* ---------- Reviews ---------- */
+.reviews-summary{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px;margin-top:48px;padding:28px 32px;border:1px solid var(--line-light);background:var(--bone-2)}
+.reviews-summary .rs-score{display:flex;align-items:center;gap:18px}
+.reviews-summary .rs-num{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(40px,5vw,56px);color:var(--ink);line-height:1}
+.reviews-summary .rs-stars{display:inline-flex;gap:4px;color:var(--gold)}
+.reviews-summary .rs-stars svg{width:22px;height:22px}
+.reviews-summary .rs-meta{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.reviews-summary .rs-count{font-family:var(--display);font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--mute-light)}
+.reviews-summary .rs-link{position:relative;display:inline-flex;align-items:center;gap:12px;padding-right:24px;font-family:var(--display);font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--ink);border-bottom:1px solid var(--ink);padding-bottom:4px;transition:color .25s,border-color .25s}
+.reviews-summary .rs-link:hover{color:var(--gold);border-color:var(--gold)}
+.reviews-summary .rs-link .arr{display:inline-block;width:7px;height:7px;border-top:1px solid currentColor;border-right:1px solid currentColor;transform:rotate(45deg)}
+@media (max-width:680px){.reviews-summary{flex-direction:column;align-items:flex-start;padding:24px}.reviews-summary .rs-meta{align-items:flex-start}}
+
+.reviews-grid{display:grid;grid-template-columns:1fr;gap:24px;margin-top:32px}
+@media (min-width:680px){.reviews-grid{grid-template-columns:repeat(2,1fr);gap:28px}}
+@media (min-width:1100px){.reviews-grid{grid-template-columns:repeat(2,1fr)}}
+
+.review-card{background:#fff;border:1px solid var(--line-light);padding:32px;display:flex;flex-direction:column;gap:18px;transition:border-color .3s var(--ease),transform .3s var(--ease)}
+.review-card:hover{border-color:var(--gold);transform:translateY(-2px)}
+.review-card .rc-head{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px}
+.review-card .rc-avatar{width:44px;height:44px;border-radius:50%;background:var(--gold);color:var(--ink);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:600;font-size:18px;flex:none}
+.review-card .rc-who{display:flex;flex-direction:column;gap:2px;min-width:0}
+.review-card .rc-name{font-family:var(--display);font-weight:500;font-size:14px;color:var(--ink);letter-spacing:.02em}
+.review-card .rc-when{font-family:var(--display);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--mute-light)}
+.review-card .rc-stars{display:inline-flex;gap:2px;color:var(--gold);flex:none}
+.review-card .rc-stars svg{width:16px;height:16px}
+.review-card .rc-text{font-family:var(--body);font-size:14.5px;line-height:1.65;color:var(--ink);font-weight:300;flex:1}
+.review-card .rc-source{font-family:var(--display);font-size:9.5px;letter-spacing:.4em;text-transform:uppercase;color:var(--mute-light);padding-top:14px;border-top:1px solid var(--line-light)}
+
+.reviews-note{margin-top:48px;text-align:center;font-size:13px;letter-spacing:.04em;color:var(--mute-light)}
+.reviews-note a{color:var(--gold);font-style:italic;font-family:var(--serif);font-size:15px;margin-left:6px;transition:opacity .25s}
+.reviews-note a:hover{opacity:.75}
+
 .philo{background:var(--bone-2)}
 .philo-grid{display:grid;grid-template-columns:1fr;gap:1px;margin-top:30px;background:var(--line-light)}
 @media (min-width:900px){.philo-grid{grid-template-columns:repeat(3,1fr)}}
@@ -1007,19 +1072,113 @@ footer{background:var(--ink);color:var(--bone);border-top:1px solid var(--line-d
       </div>
       <div class="reveal" data-delay="1">
         <h2 class="h-section">O que dizem<br/><em>os pacientes.</em></h2>
+        <p class="pull" style="margin-top:24px">Avaliações reais de pacientes no perfil do Google do Dr. Matheus Rangel — atendimento humanizado, escuta atenta e cuidado em cada detalhe.</p>
       </div>
     </div>
 
-    <!-- Widget Elfsight Google Reviews -->
-    <!-- INSTRUÇÕES: Acesse https://elfsight.com/google-reviews-widget/
-         1. Crie uma conta gratuita
-         2. Conecte o perfil do Google do Dr. Matheus Rangel
-         3. Copie o código do widget e substitua o div abaixo -->
-    <div class="reviews-widget reveal" data-delay="2">
-      <!-- Cole aqui o script do Elfsight após configurar -->
-      <!-- Exemplo: <script src="https://static.elfsight.com/platform/platform.js" async></script>
-                   <div class="elfsight-app-XXXXXXXX"></div> -->
+    <div class="reviews-summary reveal" data-delay="2">
+      <div class="rs-score">
+        <span class="rs-num">5,0</span>
+        <span class="rs-stars" aria-label="5 de 5 estrelas">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </span>
+      </div>
+      <div class="rs-meta">
+        <span class="rs-count">17 avaliações no Google</span>
+        <a href="https://www.google.com/search?q=Dr.+Matheus+Rangel+Otorrino+S%C3%A3o+Sebasti%C3%A3o+do+Para%C3%ADso" target="_blank" rel="noopener" class="rs-link">Ver no Google
+          <span class="arr"></span>
+        </a>
+      </div>
     </div>
+
+    <div class="reviews-grid">
+
+      <article class="review-card reveal" data-delay="2">
+        <div class="rc-head">
+          <div class="rc-avatar" aria-hidden="true">R</div>
+          <div class="rc-who">
+            <span class="rc-name">Rick Disc</span>
+            <span class="rc-when">há 2 semanas</span>
+          </div>
+          <span class="rc-stars" aria-label="5 estrelas">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </span>
+        </div>
+        <p class="rc-text">Tive uma excelente experiência com o Dr. Matheus Rangel. Além de ser um profissional extremamente competente, ele é muito explicativo e didático. Sanou todas as minhas dúvidas com paciência e clareza, algo raro de encontrar hoje em dia. Recomendo fortemente para quem busca um otorrino de confiança e que realmente ouve o paciente.</p>
+        <span class="rc-source">via Google</span>
+      </article>
+
+      <article class="review-card reveal" data-delay="3">
+        <div class="rc-head">
+          <div class="rc-avatar" aria-hidden="true">M</div>
+          <div class="rc-who">
+            <span class="rc-name">Maria Eduarda</span>
+            <span class="rc-when">há 2 meses · Guia local</span>
+          </div>
+          <span class="rc-stars" aria-label="5 estrelas">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </span>
+        </div>
+        <p class="rc-text">Minha mãe estava com muita dor e mesmo sendo o dia que o Dr Matheus não atende no consultório ele foi só para atender ela! Ela já tinha passado com outros médicos, que não solucionaram o caso dela. Agradecemos muitooooo por nos ajudar e pelo tratamento maravilhoso — no dia seguinte ela já estava sentindo um alívio muito grande! A secretária dele também é muito prestativa e nos ajudou demais. Obrigada!</p>
+        <span class="rc-source">via Google</span>
+      </article>
+
+      <article class="review-card reveal" data-delay="4">
+        <div class="rc-head">
+          <div class="rc-avatar" aria-hidden="true">B</div>
+          <div class="rc-who">
+            <span class="rc-name">Bela Parfrey</span>
+            <span class="rc-when">há 2 meses</span>
+          </div>
+          <span class="rc-stars" aria-label="5 estrelas">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </span>
+        </div>
+        <p class="rc-text">Excelente profissional! O Dr. Matheus é extremamente atencioso, cuidadoso e transmite muita segurança durante a consulta. Eu precisava de uma consulta com urgência e ele conseguiu me acomodar de última hora. Explicou tudo com clareza, muita paciência e demonstrou verdadeiro interesse em me ajudar. Atendimento humanizado e de altíssimo nível. Recomendo de olhos fechados!</p>
+        <span class="rc-source">via Google</span>
+      </article>
+
+      <article class="review-card reveal" data-delay="5">
+        <div class="rc-head">
+          <div class="rc-avatar" aria-hidden="true">D</div>
+          <div class="rc-who">
+            <span class="rc-name">Diocelly Leandro</span>
+            <span class="rc-when">há 2 meses</span>
+          </div>
+          <span class="rc-stars" aria-label="5 estrelas">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </span>
+        </div>
+        <p class="rc-text">Melhor médico, atendeu meu menino de 5 anos e correu tudo bem. Se recuperou rápido — não tem 1 mês que fez a cirurgia e já sarou muito. Obrigado, doutor Matheus Rangel!</p>
+        <span class="rc-source">via Google</span>
+      </article>
+
+    </div>
+
+    <p class="reviews-note reveal" data-delay="5">
+      Avaliações coletadas do perfil público do Dr. Matheus Rangel no Google.
+      <a href="https://www.google.com/search?q=Dr.+Matheus+Rangel+Otorrino+S%C3%A3o+Sebasti%C3%A3o+do+Para%C3%ADso" target="_blank" rel="noopener">Ver todas as 17 avaliações →</a>
+    </p>
 
   </div>
 </section>

@@ -727,6 +727,19 @@ h1.display {
   letter-spacing: 0.1em;
   margin-left: auto;
 }
+.filter-sort {
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 180px;
+  max-width: 100%;
+}
+@media (max-width: 640px) {
+  .filters { gap: 8px; }
+  .filter-chip { padding: 8px 12px; font-size: 10px; }
+  .filter-search { min-width: 100%; }
+  .filter-sort { min-width: 100%; }
+  .filter-count { margin-left: 0; }
+}
 
 /* ============================================
    FORMS

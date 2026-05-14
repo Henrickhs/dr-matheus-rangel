@@ -162,7 +162,6 @@ function Footer() {
             <div className="footer-list">
               <a href="https://www.instagram.com/spettacolo.motors/" target="_blank" rel="noreferrer">Instagram · {SM_DATA.contact.instagram}</a>
               <a href="https://www.tiktok.com/@spettacolomotors" target="_blank" rel="noreferrer">TikTok · {SM_DATA.contact.tiktok}</a>
-              <a href="#" target="_blank" rel="noreferrer">YouTube</a>
               <a href="#/admin" onClick={(e)=>{e.preventDefault();SM_NAV.go('/admin');}} style={{opacity:0.6, fontSize:11, letterSpacing:'0.2em', textTransform:'uppercase', marginTop:8}}>Acesso restrito</a>
             </div>
           </div>
@@ -340,8 +339,38 @@ function useCars() {
   return [cars, (newCars) => { SM_STORE.write(newCars); setCars(newCars); }];
 }
 
+// ---------------- LEADS STORE (localStorage) ----------------
+window.SM_LEADS = {
+  KEY: 'sm_leads_v1',
+  read() {
+    try {
+      const raw = localStorage.getItem(this.KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (e) {}
+    return [];
+  },
+  add(lead) {
+    const leads = this.read();
+    const now = new Date();
+    const time = now.toLocaleDateString('pt-BR', { day:'2-digit', month:'short' }) + ' · ' +
+                 now.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
+    leads.unshift({ ...lead, id: Date.now(), time });
+    localStorage.setItem(this.KEY, JSON.stringify(leads));
+    window.dispatchEvent(new CustomEvent('sm-leads-changed'));
+  }
+};
+function useLeads() {
+  const [leads, setLeads] = useState(SM_LEADS.read());
+  useEffect(() => {
+    const update = () => setLeads(SM_LEADS.read());
+    window.addEventListener('sm-leads-changed', update);
+    return () => window.removeEventListener('sm-leads-changed', update);
+  }, []);
+  return leads;
+}
+
 // Export everything to window
 Object.assign(window, {
   Icon, Logo, NavBar, Footer, CarCard, WhatsFab, PageHeader, useRoute, useCars,
-  useScrollReveal, useGlobalAnimations, HeroDust
+  useScrollReveal, useGlobalAnimations, HeroDust, useLeads
 });

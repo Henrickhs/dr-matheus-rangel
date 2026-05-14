@@ -46,28 +46,10 @@ function Hero() {
       <div className="hero-scanline"/>
       <HeroDust/>
 
-      <div className="ticker">
-        <span>EST. NOVA LIMA — MG</span>
-        <span>· 11.6K NO INSTAGRAM</span>
-        <span>· CURADORIA NACIONAL</span>
-      </div>
-
-      <div className="hero-scroll">
-        <span>Scroll</span>
-        <span className="hero-scroll-line"/>
-      </div>
-
       <div className="hero-inner">
         <div className="hero-meta">
           <div className="hero-meta-left">
             <div className="eyebrow" data-anim="fade-up" data-delay="100">Esportivos · SUVs · Colecionáveis</div>
-            <div className="mono" data-anim="fade-up" data-delay="200" style={{fontSize:11, letterSpacing:'0.18em', color:'var(--ink-mute)'}}>
-              CURADORIA · DESDE 2010
-            </div>
-          </div>
-          <div className="hero-meta-right" data-anim="fade-up" data-delay="100">
-            <span>↘ Nova Lima · MG</span>
-            <span>—20.059, —43.980</span>
           </div>
         </div>
 
@@ -359,7 +341,7 @@ function EstoquePage() {
               </button>
             ))}
             <input className="filter-search" placeholder="Buscar modelo, versão..." value={search} onChange={e => setSearch(e.target.value)}/>
-            <select className="filter-search" style={{maxWidth:200, flex:'0 0 auto'}} value={sort} onChange={e => setSort(e.target.value)}>
+            <select className="filter-search filter-sort" value={sort} onChange={e => setSort(e.target.value)}>
               <option value="featured">Ordenar: destaques</option>
               <option value="price-asc">Preço crescente</option>
               <option value="price-desc">Preço decrescente</option>
@@ -506,7 +488,19 @@ function FinanciamentoPage() {
   const [sent, setSent] = uS(false);
   uE(() => setForm(f => ({ ...f, veiculo: prefRef })), [prefRef]);
 
-  const submit = (e) => { e.preventDefault(); setSent(true); };
+  const submit = (e) => {
+    e.preventDefault();
+    SM_LEADS.add({
+      kind: 'Financiamento',
+      nome: form.nome,
+      telefone: form.telefone,
+      email: form.email,
+      subj: form.veiculo || 'Financiamento',
+      status: 'novo',
+      obs: `Renda: ${form.renda} | Entrada: ${form.entrada} | Parcelas: ${form.parcelas}x${form.mensagem ? ' | ' + form.mensagem : ''}`
+    });
+    setSent(true);
+  };
 
   if (sent) {
     return (
@@ -573,7 +567,18 @@ function FinanciamentoPage() {
 function VenderPage() {
   const [form, setForm] = uS({ nome:'', telefone:'', marca:'', modelo:'', ano:'', km:'', preco:'', obs:'' });
   const [sent, setSent] = uS(false);
-  const submit = (e) => { e.preventDefault(); setSent(true); };
+  const submit = (e) => {
+    e.preventDefault();
+    SM_LEADS.add({
+      kind: 'Avaliação',
+      nome: form.nome,
+      telefone: form.telefone,
+      subj: `${form.marca} ${form.modelo}`,
+      status: 'novo',
+      obs: `Ano: ${form.ano} | KM: ${form.km} | Preço: ${form.preco}${form.obs ? ' | ' + form.obs : ''}`
+    });
+    setSent(true);
+  };
 
   if (sent) {
     return (

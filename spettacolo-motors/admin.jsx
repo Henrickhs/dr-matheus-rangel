@@ -349,14 +349,22 @@ function CarEditModal({ car, onClose, onSave }) {
 // LEADS
 // ============================================
 function AdminLeads() {
-  const leads = [
-    { id:1, t:'14 Mai · 18:42', n:'Rafael Andrade', tel:'(31) 9 8888-1234', subj:'Porsche 718 Boxster', kind:'WhatsApp', status:'novo' },
-    { id:2, t:'14 Mai · 16:10', n:'Camila Vieira',  tel:'(11) 9 7777-5544', subj:'Mustang GT · financiamento 60x', kind:'Ficha', status:'em-andamento' },
-    { id:3, t:'14 Mai · 11:21', n:'Bruno Tavares',  tel:'(31) 9 9123-4567', subj:'Vender BMW M3 2018', kind:'Avaliação', status:'novo' },
-    { id:4, t:'13 Mai · 17:50', n:'Joana Pessoa',   tel:'(21) 9 9090-0000', subj:'Corvette Stingray', kind:'Ligação', status:'concluído' },
-    { id:5, t:'13 Mai · 15:20', n:'Luis Henrique',  tel:'(31) 9 5555-6666', subj:'Audi Q8 · entrada em troca', kind:'WhatsApp', status:'em-andamento' }
-  ];
+  const leads = useLeads();
   const statusColor = { 'novo':'var(--gold)', 'em-andamento':'#5B91D9', 'concluído':'var(--ok)' };
+
+  const onDelete = (id) => {
+    if (!confirm('Remover este lead?')) return;
+    const updated = SM_LEADS.read().filter(l => l.id !== id);
+    localStorage.setItem(SM_LEADS.KEY, JSON.stringify(updated));
+    window.dispatchEvent(new CustomEvent('sm-leads-changed'));
+  };
+
+  const toggleStatus = (id) => {
+    const cycle = { 'novo':'em-andamento', 'em-andamento':'concluído', 'concluído':'novo' };
+    const updated = SM_LEADS.read().map(l => l.id === id ? { ...l, status: cycle[l.status] || 'novo' } : l);
+    localStorage.setItem(SM_LEADS.KEY, JSON.stringify(updated));
+    window.dispatchEvent(new CustomEvent('sm-leads-changed'));
+  };
 
   return (
     <>
@@ -367,21 +375,39 @@ function AdminLeads() {
         </div>
       </div>
 
-      <table className="admin-table">
-        <thead><tr><th>Data</th><th>Cliente</th><th>Telefone</th><th>Interesse</th><th>Origem</th><th>Status</th></tr></thead>
-        <tbody>
-          {leads.map(l => (
-            <tr key={l.id} className="click">
-              <td style={{fontFamily:'var(--mono)', fontSize:11, color:'var(--ink-mute)'}}>{l.t}</td>
-              <td><div style={{fontFamily:'var(--serif)', fontSize:16}}>{l.n}</div></td>
-              <td>{l.tel}</td>
-              <td>{l.subj}</td>
-              <td><span style={{fontSize:11, letterSpacing:'0.18em', textTransform:'uppercase', color:'var(--ink-mute)'}}>{l.kind}</span></td>
-              <td><span style={{fontSize:11, letterSpacing:'0.18em', textTransform:'uppercase', color: statusColor[l.status], fontWeight:600}}>{l.status}</span></td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {leads.length === 0 ? (
+        <div style={{padding:'60px 0', textAlign:'center', color:'var(--ink-mute)'}}>
+          <div className="serif" style={{fontSize:48, fontStyle:'italic', color:'var(--gold)', marginBottom:16}}>—</div>
+          <p>Nenhum lead ainda. Os contatos dos formulários aparecerão aqui.</p>
+        </div>
+      ) : (
+        <table className="admin-table">
+          <thead><tr><th>Data</th><th>Cliente</th><th>Telefone</th><th>Interesse</th><th>Origem</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            {leads.map(l => (
+              <tr key={l.id}>
+                <td style={{fontFamily:'var(--mono)', fontSize:11, color:'var(--ink-mute)', whiteSpace:'nowrap'}}>{l.time}</td>
+                <td>
+                  <div style={{fontFamily:'var(--serif)', fontSize:16}}>{l.nome}</div>
+                  {l.obs && <div style={{fontSize:11, color:'var(--ink-mute)', marginTop:2}}>{l.obs.slice(0,60)}{l.obs.length>60?'…':''}</div>}
+                </td>
+                <td>{l.telefone}</td>
+                <td>{l.subj}</td>
+                <td><span style={{fontSize:11, letterSpacing:'0.18em', textTransform:'uppercase', color:'var(--ink-mute)'}}>{l.kind}</span></td>
+                <td>
+                  <span title="Clique para avançar status" onClick={() => toggleStatus(l.id)}
+                    style={{fontSize:11, letterSpacing:'0.18em', textTransform:'uppercase', color: statusColor[l.status||'novo'], fontWeight:600, cursor:'pointer'}}>
+                    {l.status || 'novo'}
+                  </span>
+                </td>
+                <td>
+                  <button className="iconbtn danger" title="Remover" onClick={() => onDelete(l.id)}><Icon.Trash/></button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </>
   );
 }
@@ -390,6 +416,15 @@ function AdminLeads() {
 // SETTINGS
 // ============================================
 function AdminSettings() {
+  const [claudeKey, setClaudeKey] = aS(() => localStorage.getItem('sm_claude_key') || '');
+  const [keySaved, setKeySaved] = aS(false);
+
+  const saveKey = () => {
+    localStorage.setItem('sm_claude_key', claudeKey);
+    setKeySaved(true);
+    setTimeout(() => setKeySaved(false), 2000);
+  };
+
   return (
     <>
       <div className="admin-head">
@@ -400,10 +435,17 @@ function AdminSettings() {
       </div>
       <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:1, background:'var(--line-soft)', border:'1px solid var(--line-soft)'}} className="set-grid">
         <div style={{background:'var(--bg-2)', padding:'32px'}}>
-          <div className="eyebrow" style={{marginBottom:14}}>Conta</div>
-          <h3 className="serif" style={{fontSize:24, marginBottom:12}}>Senha do painel</h3>
-          <p style={{color:'var(--ink-mute)', fontSize:13, marginBottom:20}}>A senha atual está definida em código. Para alterar, edite o arquivo admin.jsx.</p>
-          <div style={{padding:14, background:'var(--bg)', border:'1px solid var(--line-soft)', fontFamily:'var(--mono)', fontSize:13, color:'var(--gold)'}}>admin0707</div>
+          <div className="eyebrow" style={{marginBottom:14}}>IA · Sofia</div>
+          <h3 className="serif" style={{fontSize:24, marginBottom:12}}>Chave da API Anthropic</h3>
+          <p style={{color:'var(--ink-mute)', fontSize:13, marginBottom:20}}>
+            Cole sua chave da <a href="https://console.anthropic.com" target="_blank" rel="noreferrer" style={{color:'var(--gold)'}}>console.anthropic.com</a> para ativar a Sofia. Salvo localmente, nunca enviado a terceiros.
+          </p>
+          <div style={{display:'flex', gap:10}}>
+            <input type="password" value={claudeKey} onChange={e => setClaudeKey(e.target.value)}
+              placeholder="sk-ant-api03-..."
+              style={{flex:1, padding:'12px 14px', background:'var(--bg)', border:'1px solid var(--line-soft)', color:'var(--ink)', fontSize:13}}/>
+            <button className="btn sm" onClick={saveKey}>{keySaved ? '✓ Salvo' : 'Salvar'}</button>
+          </div>
         </div>
         <div style={{background:'var(--bg-2)', padding:'32px'}}>
           <div className="eyebrow" style={{marginBottom:14}}>Persistência</div>
@@ -455,17 +497,50 @@ ${cars.map(c => `- [${c.ref}] ${c.brand} ${c.model} (${c.year}) ${SM_FMT.km(c.km
 
 Contato: ${SM_DATA.contact.phones.join(' / ')}. Endereço: ${SM_DATA.contact.address}.
 
-Responda em português brasileiro, tom premium e direto. Use no máximo 6 linhas. Use marcadores quando ajudar.`;
+Responda em português brasileiro, tom premium e direto. Máximo 6 linhas. Use marcadores quando ajudar.`;
 
     try {
-      const reply = await window.claude.complete({
-        messages: [
-          { role: 'user', content: ctx + '\n\nPergunta do administrador: ' + userText }
-        ]
+      // Ambiente Claude Code: usa window.claude se disponível
+      if (window.claude && typeof window.claude.complete === 'function') {
+        const reply = await window.claude.complete({
+          messages: [{ role: 'user', content: ctx + '\n\nPergunta: ' + userText }]
+        });
+        setMsgs(m => [...m, { role: 'bot', content: reply }]);
+        return;
+      }
+
+      // Produção: usa chave da API Anthropic salva nas configurações
+      const apiKey = localStorage.getItem('sm_claude_key');
+      if (!apiKey) {
+        setMsgs(m => [...m, { role: 'bot', content: 'Sofia não está configurada ainda.\n\nVá em Ajustes → Chave da API Anthropic, cole sua chave de console.anthropic.com e salve. A Sofia estará pronta!' }]);
+        return;
+      }
+
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-allow-browser': 'true'
+        },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5-20251001',
+          max_tokens: 400,
+          system: ctx,
+          messages: [{ role: 'user', content: userText }]
+        })
       });
-      setMsgs(m => [...m, { role: 'bot', content: reply }]);
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error?.message || 'Erro ' + res.status);
+      }
+
+      const data = await res.json();
+      setMsgs(m => [...m, { role: 'bot', content: data.content[0].text }]);
     } catch (e) {
-      setMsgs(m => [...m, { role: 'bot', content: 'Não consegui processar agora. Tente novamente em alguns segundos.' }]);
+      setMsgs(m => [...m, { role: 'bot', content: `Erro ao conectar: ${e.message}.\n\nVerifique a chave da API em Ajustes.` }]);
     } finally {
       setBusy(false);
     }
